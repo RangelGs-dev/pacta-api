@@ -28,4 +28,4 @@ yarn-debug.log*
 .vscode-test
 
 # Files
-/public/uploads/contratos
+/uploads/contratos
