@@ -28,5 +28,5 @@ yarn-debug.log*
 .vscode-test
 
 # Files
-public/uploads/contratos/*
+public/uploads/*
 !.gitkeep
