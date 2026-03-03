@@ -3,10 +3,11 @@ import multer from "multer";
 import fs from "fs/promises";
 import path from "path";
 import conexao from "../config/database.js";
+import { verificarToken } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", verificarToken, async (req, res) => {
   try {
     const [rows] = await conexao.query("SELECT * FROM contratos");
 
@@ -25,7 +26,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/create", async (req, res) => {
+router.post("/create", verificarToken, async (req, res) => {
   try {
     const {
       nome,
@@ -122,6 +123,7 @@ const upload = multer({ storage });
 
 router.post(
   "/:id/upload",
+  verificarToken,
   validaContrato,
   upload.single("arquivo"),
   async (req, res) => {

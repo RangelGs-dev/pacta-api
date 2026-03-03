@@ -1,5 +1,7 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import authRouter from "./routes/authRouter.js";
 import contratosRouter from "./routes/contratosRouter.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -10,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/auth", authRouter);
 app.use("/contratos", contratosRouter);
 
 const __filename = fileURLToPath(import.meta.url);
