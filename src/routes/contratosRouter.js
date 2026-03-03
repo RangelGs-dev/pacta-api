@@ -26,7 +26,7 @@ router.get("/", verificarToken, async (req, res) => {
   }
 });
 
-router.post("/create", async (req, res) => {
+router.post("/create", verificarToken, async (req, res) => {
   try {
     const {
       nome,
@@ -123,6 +123,7 @@ const upload = multer({ storage });
 
 router.post(
   "/:id/upload",
+  verificarToken,
   validaContrato,
   upload.single("arquivo"),
   async (req, res) => {
