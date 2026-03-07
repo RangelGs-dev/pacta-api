@@ -4,7 +4,7 @@ import {
   gerarSenhaHash,
   compararSenha,
 } from "../services/auth.service.js";
-import conexao from "../config/database.js";
+import pool from "../config/database.js";
 
 const router = express.Router();
 
@@ -21,7 +21,7 @@ router.post("/registro", async (req, res) => {
 
     const dadosInsert = [nome, email, senhaHash, permissao];
 
-    const [result] = await conexao.query(
+    const [result] = await pool.query(
       `INSERT INTO usuarios(nome, email, senha_hash, role) VALUES(?, ?, ?, ?)`,
       dadosInsert,
     );
@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ error: "Email ou senha invalidos" });
     }
 
-    const [result] = await conexao.query(
+    const [result] = await pool.query(
       `Select * FROM usuarios WHERE email = ?`,
       [email],
     );

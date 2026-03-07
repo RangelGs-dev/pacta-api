@@ -2,14 +2,14 @@ import express from "express";
 import multer from "multer";
 import fs from "fs/promises";
 import path from "path";
-import conexao from "../config/database.js";
+import pool from "../config/database.js";
 import { verificarToken } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router.get("/", verificarToken, async (req, res) => {
   try {
-    const [rows] = await conexao.query("SELECT * FROM contratos");
+    const [rows] = await pool.query("SELECT * FROM contratos");
 
     if (rows.length === 0) {
       return res
@@ -56,7 +56,7 @@ router.post("/create", verificarToken, async (req, res) => {
       valorContrato,
       cnpjFornecedor,
     ];
-    const [result] = await conexao.query(
+    const [result] = await pool.query(
       "INSERT INTO `contratos`(nome, setor_contratante, tipo_pessoa, razao_social, valor_contrato, cnpj_fornecedor ) VALUES (?, ?, ?, ?, ?, ?)",
       dadosInsert,
     );
@@ -80,7 +80,7 @@ async function validaContrato(req, res, next) {
       return res.status(400).json({ error: "Contrato inválido" });
     }
 
-    const [rows] = await conexao.query(
+    const [rows] = await pool.query(
       "SELECT contrato_id FROM contratos WHERE contrato_id = ?",
       [idContrato],
     );
@@ -138,7 +138,7 @@ router.post(
     const arquivoUrl = `/uploads/contratos/${idContrato}/${req.file.filename}`;
 
     try {
-      await conexao.query(
+      await pool.query(
         `UPDATE contratos SET arquivo_url = ? WHERE contrato_id = ?`,
         [arquivoUrl, idContrato],
       );

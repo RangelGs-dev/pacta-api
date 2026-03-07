@@ -7,18 +7,25 @@ import mysql from "mysql2/promise";
 
 const config = {
   host: process.env.DB_HOST || "localhost",
-  port: parseInt(process.env.DB_PORT) || 3306,
   user: process.env.DB_USER || "root",
-  password: process.env.DB_PASS || "",
   database: process.env.DB_NAME || "",
+  waitForConnections: true,
+  connectionLimit: 10,
+  maxIdle: 10,
+  idleTimeout: 60000,
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0,
+  port: parseInt(process.env.DB_PORT) || 3306,
+  password: process.env.DB_PASS || "",
 };
 
-let conexao;
+let pool;
 try {
-  conexao = await mysql.createConnection(config);
+  pool = mysql.createPool(config);
 } catch (error) {
   console.error("Erro ao conectar no banco de dados:", error.message);
   throw error;
 }
 
-export default conexao;
+export default pool;
